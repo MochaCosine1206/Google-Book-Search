@@ -1,3 +1,5 @@
-nav.navbar.navbar-default {
+.navbar {
     margin-bottom: 0;
+    color: darkslategrey;
+    background-color: #AFD;
   }

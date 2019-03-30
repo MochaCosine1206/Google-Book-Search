@@ -107,7 +107,7 @@ class Search extends Component {
                     <Row>
                         <Col size="xs-12">
                             {!this.state.books.length ? (
-                                <h3>No books to display</h3>
+                                <h3>Search Above for a book!</h3>
                             ) : (
                                     <List>
                                         {this.state.books.map(book => (
