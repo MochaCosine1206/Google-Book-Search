@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import DeleteBtn from "../components/DeleteBtn";
 import Jumbotron from "../components/Jumbotron";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
 import { Row, Container, Col } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
@@ -10,7 +8,15 @@ import { Input, FormBtn } from "../components/Form";
 class Search extends Component {
     state = {
         books: [],
-        search: ""
+        search: "",
+        id: "",
+        title: "",
+        description: "",
+        synopsys:"",
+        thumbnail:"",
+        author: "",
+        link: "",
+        saveState: ""
     };
 
     // componentDidMount() {
@@ -25,7 +31,16 @@ class Search extends Component {
     //         .catch(err => console.log(err));
     // };
 
+    // SaveBooksMethod
 
+    saveBook = (id, title, description, author, link, synopsys, thumbnail) => {
+        API.saveBook({
+            bookId: id, title: title, description: description, author: author, link: link, synopsys: synopsys, thumbnail: thumbnail, saveState: true
+        }).then(res => {
+            console.log(res.data);
+        })
+            .catch(err => console.log(err));
+    }
 
 
     deleteBook = id => {
@@ -39,15 +54,15 @@ class Search extends Component {
         this.setState({
             [name]: value
         });
-        
+
     };
 
     handleFormSubmit = event => {
         event.preventDefault();
-        API.getBooks(this.state.search)
+        API.googlebooks(this.state.search)
             .then(res => {
                 console.log(res.data)
-                const {items} = res.data
+                const { items } = res.data
                 console.log(items);
                 this.setState({ books: items })
                 console.log(this.state.books)
@@ -91,31 +106,27 @@ class Search extends Component {
                     </Row>
                     <Row>
                         <Col size="xs-12">
-                        {!this.state.books.length ? (
-                            <h3>No books to display</h3>
-                        ) : (
-                            <List>
-                                {this.state.books.map(book => (
-                                    <ListItem
-                                        key={book.id}
-                                        id={book.id}
-                                        title={book.volumeInfo.title}
-                                        description={ (!book.searchInfo) ? <p></p> : book.searchInfo.textSnippet}
-                                        author={(!book.volumeInfo.authors) ? "No Author Available" : book.volumeInfo.authors[0]}
-                                        link={book.volumeInfo.infoLink}
-                                        thumbnail={ (!book.volumeInfo.imageLinks) ? "https://via.placeholder.com/150" : book.volumeInfo.imageLinks.thumbnail}
-                                        synopsys={book.volumeInfo.description}
-                                    >
-                                        <Link to={"/books/" + book.id}>
-                                            <strong>
-                                                {book.volumeInfo.title} by {book.volumeInfo.authors}
-                                            </strong>
-                                        </Link>
-                                        <DeleteBtn onClick={() => this.deleteBook(book.id)} />
-                                    </ListItem>
-                                ))}
-                            </List>
-                        )}
+                            {!this.state.books.length ? (
+                                <h3>No books to display</h3>
+                            ) : (
+                                    <List>
+                                        {this.state.books.map(book => (
+                                            <ListItem
+                                                key={book.id}
+                                                id={book.id}
+                                                title={book.volumeInfo.title}
+                                                description={(!book.searchInfo) ? <p></p> : book.searchInfo.textSnippet}
+                                                author={(!book.volumeInfo.authors) ? "No Author Available" : book.volumeInfo.authors[0]}
+                                                link={book.volumeInfo.infoLink}
+                                                thumbnail={(!book.volumeInfo.imageLinks) ? "https://via.placeholder.com/150" : book.volumeInfo.imageLinks.thumbnail}
+                                                synopsys={book.volumeInfo.description}
+                                                saveState = {this.saveState}
+                                                saveBook = {this.saveBook}
+                                            >
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                )}
                         </Col>
                     </Row>
                 </Container>

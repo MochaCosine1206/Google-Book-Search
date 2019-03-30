@@ -1,5 +1,6 @@
 const axios = require("axios");
 const router = require("express").Router();
+const booksController = require("../../controllers/booksController");
 
 
 router.get("/search", (req, res) => {
@@ -9,14 +10,11 @@ router.get("/search", (req, res) => {
     .catch(err => res.status(422).json(err));
 });
 
-// router.route("/")
-//   .get(booksController.findAll)
-//   .post(booksController.create);
+router.route("/")
+  .get(booksController.findAll)
+  .post(booksController.create);
 
-//   router
-//   .route("/:id")
-//   .get(booksController.findById)
-//   .put(booksController.update)
-//   .delete(booksController.remove);
+  router.route("/:id")
+  .delete(booksController.remove);
 
 module.exports = router;

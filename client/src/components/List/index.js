@@ -1,22 +1,8 @@
 import React from "react";
 import "./style.css";
-// import Thumbnail from "../Thumbnail";
 import { Container, Row, Col } from "../Grid";
 
 
-//SaveBooksMethod
-
-// handleFormSubmit = event => {
-//   event.preventDefault();
-//   API.saveBook({
-//     title: this.state.title, author: this.state.author, synopsis: this.state.synopsis
-//   }).then(res => {
-//     console.log(res.data);
-//     this.setState({ books: res.data});
-//     this.loadBooks();
-//   })
-//   .catch(err => console.log(err));
-// }
 
 // This file exports both the List and ListItem components
 
@@ -49,18 +35,22 @@ export function ListItem(props) {
             >
               view
             </a>
-            <button
+            {(props.saveState === undefined) ? <button
               className="btn btn-success float-right mr-3"
-              // onClick={this.handleFormSubmit}
+              onClick={ e => props.saveBook(props.id, props.title, props.description, props.author, props.link, props.synopsys, props.thumbnail)}
             >
               Save
+            </button> : 
+            <button className="btn btn-danger float-right mr-3" onClick={() => props.deleteBook(props.id)}>
+            delete
             </button>
+          }
+            
             </Col>
         </Row>
         <Row>
           <Col size="xs-12 sm-12 md-3">
-          <img src={props.thumbnail || "https://via.placeholder.com/150"} />
-            {/* <Thumbnail src={props.thumbnail || "https://via.placeholder.com/150"} /> */}
+          <img alt={props.title} src={props.thumbnail || "https://via.placeholder.com/150"} />
           </Col>
           <Col size="xs-12 sm-12 md-9">
             { props.synopsys ? <p>Synopsis: {props.synopsys}</p> : <p>No Synopsis Available</p>}
